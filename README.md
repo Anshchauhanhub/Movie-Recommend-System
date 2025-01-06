@@ -10,6 +10,11 @@ This repository contains a Movie Recommender System built with Streamlit. The ap
 - [Contributing](#contributing)
 - [License](#license)
 
+🎬 Try it Out:
+Live Demo:
+https://movie-recommend-system-w5msrk83ujhsxbipd9t4cv.streamlit.app/
+
+
 ## Installation
 
 1. Clone the repository:
