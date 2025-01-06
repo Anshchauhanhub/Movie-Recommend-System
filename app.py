@@ -34,19 +34,24 @@ def recommend(movie, num_recommendations=10):
 
 st.title('🎬 Movie Recommender System ')
 
-search_term = st.text_input('Search for a movie:')
+option = st.radio('Choose an option:', ['Search for a movie', 'Select a movie from the list'])
 
-if search_term:
-    search_results = df[df['title'].str.contains(search_term, case=False, na=False)]
-    if not search_results.empty:
-        selected_movie = st.selectbox('Select a movie from search results:', search_results['title'].values)
+if option == 'Search for a movie':
+    search_term = st.text_input('Search for a movie:')
+    if search_term:
+        search_results = df[df['title'].str.contains(search_term, case=False, na=False)]
+        if not search_results.empty:
+            selected_movie = st.selectbox('Select a movie from search results:', search_results['title'].values)
+        else:
+            st.write("No movies found with that title.")
+            selected_movie = None
     else:
-        st.write("No movies found with that title.")
         selected_movie = None
-else:
-    selected_movie = st.sidebar.selectbox('Select a movie:', df['title'])
 
-num_recommendations = st.sidebar.slider('Number of recommendations:', 1, 10,5)
+elif option == 'Select a movie from the list':
+    selected_movie = st.selectbox('Select a movie from the list:', df['title'])
+
+num_recommendations = st.sidebar.slider('Number of recommendations:', 1, 10)
 
 if selected_movie and st.button('Recommend'):
     recommended_movies, recommended_movies_posters = recommend(selected_movie, num_recommendations)
