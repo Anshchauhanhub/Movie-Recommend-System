@@ -13,7 +13,7 @@ def fetch_poster(movie_id):
 movies_dict = pkl.load(open('movies_dict.pkl', 'rb'))
 df = pd.DataFrame(movies_dict)
 
-df['tags'].fillna('', inplace=True)
+df = df.fillna({'tags': ''})
 
 cv = CountVectorizer(max_features=5000, stop_words='english')
 vectorized_data = cv.fit_transform(df['tags'])
@@ -34,11 +34,21 @@ def recommend(movie, num_recommendations=10):
 
 st.title('🎬 Movie Recommender System ')
 
-selected_movie = st.sidebar.selectbox('Select a movie:', df['title'])
+search_term = st.text_input('Search for a movie:')
 
-num_recommendations = st.sidebar.slider('Number of recommendations:', 1,20, 10)
+if search_term:
+    search_results = df[df['title'].str.contains(search_term, case=False, na=False)]
+    if not search_results.empty:
+        selected_movie = st.selectbox('Select a movie from search results:', search_results['title'].values)
+    else:
+        st.write("No movies found with that title.")
+        selected_movie = None
+else:
+    selected_movie = st.sidebar.selectbox('Select a movie:', df['title'])
 
-if st.button('Recommend'):
+num_recommendations = st.sidebar.slider('Number of recommendations:', 1, 10,5)
+
+if selected_movie and st.button('Recommend'):
     recommended_movies, recommended_movies_posters = recommend(selected_movie, num_recommendations)
     st.write(f"Top {num_recommendations} movies similar to **{selected_movie}** are:")
     for movie, poster in zip(recommended_movies, recommended_movies_posters):
