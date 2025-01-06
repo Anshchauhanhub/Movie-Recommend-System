@@ -51,7 +51,7 @@ if option == 'Search for a movie':
 elif option == 'Select a movie from the list':
     selected_movie = st.selectbox('Select a movie from the list:', df['title'])
 
-num_recommendations = st.sidebar.slider('Number of recommendations:', 1, 10)
+num_recommendations = st.sidebar.slider('Number of recommendations:', 1, 10,5)
 
 if selected_movie and st.button('Recommend'):
     recommended_movies, recommended_movies_posters = recommend(selected_movie, num_recommendations)
